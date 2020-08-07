@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 封装优先级队列
+    function priorityQueue() {
+      // 内部创建一个类
+      function QueueElement(element,priority) {
+        this.element = element
+        this.priority = priority
+      }
+      this.items = []
+      // 实现插入方法
+      priorityQueue.prototype.enqueue = function(element,priority){
+        // 1.创建QueueElement对象
+        var queueElement = new QueueElement(element,priority)
+        // 2.判断队列是否为空
+        if(this.items.length == 0){
+          this.items.push(queueElement)
+        } else {
+            var added = false
+            for(var i=0;i < this.items.length;i++){
+              if(queueElement.priority < this.items[i].priority) {
+                this.items.splice(i,0,queueElement)
+                added = true
+                break
+              }
+            }
+            // 处理在最后面插入情况
+            if(!added) {
+              console.log('abc');
+              this.items.push(queueElement)
+            }
+        }
+      }
+    }
+
+    // 测试代码
+    var pq = new priorityQueue()
+    pq.enqueue('abc',111)
+    pq.enqueue('kkk',1)
+    pq.enqueue('ccc',100)
+    pq.enqueue('why',66)
+    // alert(pq)
+    console.log(pq);
+  </script>
+</body>
+</html>

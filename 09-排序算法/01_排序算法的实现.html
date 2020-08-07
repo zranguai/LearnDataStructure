@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 创建列表类
+    function ArrayList(){
+      // 属性
+      this.array = []
+      // 方法
+      // 将数据可以插入到数组中的方法
+      ArrayList.prototype.insert = function(item){
+        this.array.push(item)
+      }
+      // toString方法
+      ArrayList.prototype.toString = function(){
+        return this.array.join('-')
+      }
+      // 实现排序算法
+      // 交换两个位置的数据
+      ArrayList.prototype.swap = function(m,n){
+        var temp = this.array[m]
+        this.array[m] = this.array[n]
+        this.array[n] = temp
+      }
+      // 冒泡排序
+      ArrayList.prototype.bubbleSort = function(){
+        // 1.获取数组的长度
+        var length = this.array.length
+        for(var j = length - 1;j >= 0;j--){
+          for(var i = 0; i < j;i++){
+            if(this.array[i] > this.array[i+1]){
+              this.swap(i,i+1)
+            }
+          }
+        }
+      }
+      // 选择排序
+      ArrayList.prototype.selectionSort = function(){
+        // 1.获取数组长度
+        var length = this.array.length
+        for(var i = 0;i < length;i++){
+          var min = i
+          for(var j = i;j < length;j++){
+            if(this.array[min] > this.array[j]){
+              min = j
+            }
+          }
+          this.swap(i,min)
+        }
+      }
+      // 插入排序
+      ArrayList.prototype.insertionSort = function(){
+        // 1.获取数组长度
+        var length = this.array.length
+        // 2.外层循环：从第一个位置获取数据，像前面局部有序进行插入
+        for(var i = 1;i < length;i++){
+          // 3.内层循环：获取i位置元素，和前面依次进行比较
+          var temp = this.array[i]
+          var j = i
+          while(this.array[j - 1] > temp && j > 0){
+            this.array[j] = this.array[j - 1]
+            j--
+          }
+          // 4.将temp放置在j位置上
+          this.array[j] = temp
+        }
+      }
+      // 希尔排序
+      ArrayList.prototype.shellSort = function(){
+        // 1.获取数组长度
+        var length = this.array.length
+        // 2.初始化的增量
+        var gap = Math.floor(length / 2)
+        // 3.while循环（gap不断减小）
+        while(gap >= 1){
+          // 4.以gap作为间隔，进行分组，对分组进行插入排序
+          for(var i = gap;i < length;i++){
+            var temp = this.array[i]
+            var j = i
+            while(this.array[j - gap] > this.array[j] && j > gap - 1){
+              this.array[j] = this.array[j - gap]
+              j -= gap
+            }
+            // 5.将j位置的元素置为temp
+            this.array[j] = temp
+          }
+          // 6.增量变化
+          gap = Math.floor(gap / 2)
+        }
+      }
+      // 快速排序(有点问题)
+      // 1.选择枢纽
+      ArrayList.prototype.median = function(left,right){
+        // 1.取出中间的位置
+        var center = Math.floor((left + right) / 2)
+        // 2.判断大小，并且进行交换
+        if(this.array[left] > this.array[center]){
+          this.swap(left,center)
+        }
+        if(this.array[center] > this.array[right]){
+          this.swap(center,right)
+        }
+        if(this.array[left] > this.array[center]){
+          this.swap(left,center)
+        }
+        // 3.将center换到right - 1位置上
+        this.swap(center,right - 1)
+        return this.array[right - 1]
+      }
+      // 2.快速排序的实现
+      ArrayList.prototype.quickSort = function(){
+        this.quick(0,this.array.length - 1)
+      }
+      ArrayList.prototype.quick = function(left,right){
+        // 1.结束条件
+        if(left >= right) return
+        // 2.获取枢纽
+        var pivot = this.median(left,right)
+        // 3.定义变量，用于记录当前找到的位置
+        var i = left
+        var j = right - 1
+        // 4.开始进行交换
+        while(true){
+          while(this.array[++i] < pivot) {}
+          while(this.array[--j] > pivot) {}
+          if(i < j) {
+            this.swap(i,j)
+          } else {
+            break
+          }
+        }
+        // 5.将枢纽放置在正确位置(i)
+        this.swap(i,right - 1)
+        // 6.分而治之
+        this.quick(left,i - 1)
+        this.quick(i + 1,right)
+      }
+    }
+    // 测试类
+    var list = new ArrayList()
+    // 插入元素
+    list.insert(66)
+    list.insert(88)
+    list.insert(12)
+    list.insert(87)
+    list.insert(100)
+    list.insert(5)
+    list.insert(566)
+    list.insert(23)
+    alert(list)
+    // 验证冒泡排序
+    // list.bubbleSort()
+    // alert(list)
+    // 验证选择排序
+    // list.selectionSort()
+    // alert(list)
+    // 验证插入排序
+    // list.insertionSort()
+    // alert(list)
+    // 验证希尔排序
+    // list.selectionSort()
+    // alert(list)
+    // 验证快速排序
+    list.quickSort()
+    alert(list)
+  </script>
+</body>
+</html>

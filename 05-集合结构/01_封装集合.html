@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 封装集合类
+    function Set() {
+      // 属性
+      this.items = {}
+      // 方法
+      // add方法
+      Set.prototype.add = function(value){
+        // 当前集合是否已经包含了该对象
+        if(this.has(value)) return false
+        // 将元素添加到集合中
+        this.items[value] = value
+        return true
+      }
+      // has方法
+      Set.prototype.has = function(value){
+        return this.items.hasOwnProperty(value)
+      }
+      // remove方法
+      Set.prototype.remove = function(value){
+        // 判断集合中是否包含该元素
+        if(!this.has(value)) return false
+        // 将元素删除
+        delete this.items[value]
+        return true
+      }
+      // clear方法
+      Set.prototype.clear = function(){
+        this.items = {}
+      }
+      // size方法
+      Set.prototype.size = function(){
+        return Object.keys(this.items).length
+      }
+      // 获取集合中所有的值
+      Set.prototype.values = function(){
+        return Object.keys(this.items)
+      }
+      // 集合间的操作
+      // 并集
+      Set.prototype.union = function(otherSet){
+        // this: 集合对象A
+        // otherSet: 集合对象B
+        // 1.创建新的集合
+        var unionSet = new Set()
+        // 2.将A集合添加到新的集合中
+        var values = this.values()
+        for(var i = 0;i < values.length;i++){
+          unionSet.add(values[i])
+        }
+        // 3.将B集合添加到新的集合中
+        values = otherSet.values()
+        for(var i = 0;i < values.length;i++){
+          unionSet.add(values[i])
+        }
+        return unionSet
+      }
+      // 交集
+      Set.prototype.intersection = function(otherSet){
+        // this: 集合对象A
+        // otherSet: 集合对象B
+        // 1.创建新的集合
+        var intersectionSet = new Set()
+        // 2.从A中取出一个元素看是否在B中
+        var values = this.values()
+        for(var i = 0;i < values.length;i++){
+          var item = values[i]
+          if(otherSet.has(item)){
+            intersectionSet.add(item)
+          }
+        }
+        return intersectionSet
+      }
+      // 差集
+      Set.prototype.difference = function(otherSet){
+        // this: 集合对象A
+        // otherSet: 集合对象B
+        // 1.创建新的集合
+        var differenceSet = new Set()
+        var values = this.values()
+        for(var i = 0;i < values.length;i++){
+          var item = values[i]
+          if( ! otherSet.has(item)){
+            differenceSet.add(item)
+          }
+        }
+        return differenceSet
+      }
+      // 子集
+      Set.prototype.subset = function(otherSet){
+        // this: 集合对象A
+        // otherSet: 集合对象B
+        // 判断A是否为B的子集 遍历A中所有元素，若A中的有元素不在B中返回false
+        var values = this.values()
+        for(var i = 0;i < values.length;i++){
+          var item = values[i]
+          if( !otherSet.has(item)){
+            return false
+          }
+        }
+        return true
+      }
+    }
+    // 测试
+    // 1.创建set类对象
+    var set = new Set()
+    // 2.添加元素
+    // alert(set.add('abc'))
+    // alert(set.add('abc'))
+    // alert(set.add('cba'))
+    // alert(set.add('nba'))
+    // alert(set.add('mba'))
+    // alert(set.values())
+    // 3.删除元素
+    // console.log(set.remove('mba'))
+    // console.log(set.remove('mba'))
+    // alert(set.values())
+
+    // 1.创建两个集合
+    var setA = new Set()
+    // setA.add('abc')
+    setA.add('cba')
+    setA.add('nba')
+    var setB = new Set()
+    setB.add('aaa')
+    setB.add('nba')
+    setB.add('cba')
+    // 2.求两个并集
+    var unionSet = setA.union(setB)
+    // alert(unionSet.values())
+    // 3.求两个集合的交集
+    var intersectionSet = setA.intersection(setB)
+    // alert(intersectionSet.values())
+    // 4.求两个集合的差集
+    var differenceSet = setA.difference(setB)
+    alert(differenceSet.values())
+    // 5.判断子集
+    alert(setA.subset(setB))
+  </script>
+</body>
+</html>

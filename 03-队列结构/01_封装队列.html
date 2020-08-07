@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 封装队列
+    function Queue() {
+      // 属性
+      this.items = []
+      // 1.将元素加入到队列
+      Queue.prototype.enqueue = function(element) {
+        this.items.push(element)
+      }
+      // 2.从队列中删除元素
+      Queue.prototype.dequeue = function() {
+        return this.items.shift()
+      }
+      // 3.查看前端元素
+      Queue.prototype.front = function() {
+        return this.items[0]
+      }
+      // 4.查看队列是否为空
+      Queue.prototype.isEmpty = function() {
+        return this.items.length == 0
+      }
+      // 5.查看队列中元素的个数
+      Queue.prototype.size = function() {
+        return this.items.length
+      }
+      // 6.toString方法
+      Queue.prototype.toString = function(){
+        var resultString = ''
+        for (var i = 0; i < this.items.length; i++) {
+          resultString += this.items[i] + ' '
+        }
+        return resultString 
+      }
+    }
+
+    // 使用队列
+    // var queue = new Queue()
+
+    // queue.enqueue('abc')
+    // queue.enqueue('cba')
+    // queue.enqueue('nba')
+    // alert(queue)
+    // queue.dequeue()
+    // alert(queue)
+    // alert(queue.front())
+    // alert(queue.isEmpty())
+    // alert(queue.size())
+
+    // 面试题：击鼓传花
+    function passGame (nameList,num) {
+      // 1.创建队列
+      var queue = new Queue()
+      // 2.加入队列
+      for (var i = 0;i < nameList.length;i++) {
+        queue.enqueue(nameList[i])
+      }
+      // 3.开始数数字
+      while(queue.size() > 1) {
+        for(var i = 0;i < num - 1;i++) {
+        queue.enqueue(queue.dequeue())
+      }
+      // 删除
+      queue.dequeue()
+      }
+      // 4.获取剩下的那个人
+      alert(queue.size())
+      var endName = queue.front()
+      console.log(endName);
+      alert('胜利的是：' + endName)
+      return nameList.indexOf(endName)
+    }
+
+    // 测试击鼓传花
+    names = ['lily','lucy','tom','lilei','why']
+    alert(passGame(names,3))
+  </script>
+</body>
+</html>
